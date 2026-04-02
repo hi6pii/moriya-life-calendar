@@ -56,10 +56,14 @@ def parse_daily(soup, year, month):
 
             start = datetime(year, month, day)
             end = start + timedelta(days=1)
+            date = start.strftime("%Y%m%d")
+            start_tm = start.strftime("%Y%m%dT070000")
+            end_tm = start.strftime("%Y%m%dT080000")
 
             results.append({
-                "date": start.strftime("%Y%m%d"),
-                "end_date": end.strftime("%Y%m%d"),
+                "date": date,
+                "start_tm": start_tm,
+                "end_tm": end_tm,
                 "garbage": garbage
             })
     return results
@@ -72,8 +76,8 @@ def build_event(data):
     return f"""BEGIN:VEVENT
 UID:{uid}
 DTSTAMP:{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}
-DTSTART;VALUE=DATE:{data['date']}
-DTEND;VALUE=DATE:{data['end_date']}
+DTSTART;TZID=Asia/Tokyo:{data['start_tm']}
+DTEND;TZID=Asia/Tokyo:{data['end_tm']}
 SUMMARY:{data['garbage']}
 END:VEVENT
 
